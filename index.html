@@ -1,11 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Lab Homepage</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plasma Lab Homepage</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9fafb;
+    }
+
+    header {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    #login-section {
+      background-color: white;
+      padding: 20px;
+      margin: 40px auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    #login-section input {
+      width: 90%;
+      padding: 8px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #login-section button {
+      background-color: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #login-section button:hover {
+      background-color: #334bb3;
+    }
+
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to My Lab</h1>
-  <p>This is a private test version.</p>
+  <header>
+    <h2>Plasma Research Lab</h2>
+    <nav>
+      <ul id="menu">
+        <li><a href="#">Introduction</a></li>
+        <li><a href="#">Member</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#">QnA</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <!-- 로그인 전에는 숨김 -->
+        <li class="restricted" style="display:none;"><a href="#">Schedule</a></li>
+        <li class="restricted" style="display:none;"><a href="#">Archive</a></li>
+      </ul>
+    </nav>
+    <button id="login-btn" style="background:#fff;color:#1e3a8a;font-weight:bold;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;">Login</button>
+  </header>
+
+  <main>
+    <h1>Welcome to the Plasma Research Lab</h1>
+    <p>This is a demo homepage for lab website development.</p>
+  </main>
+
+  <!-- 로그인창 -->
+  <div id="login-section" style="display:none;">
+    <h3>Login</h3>
+    <input type="text" id="userid" placeholder="User ID"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+  </div>
+
+  <script>
+    const loginBtn = document.getElementById('login-btn');
+    const loginBox = document.getElementById('login-section');
+    const restrictedMenus = document.querySelectorAll('.restricted');
+
+    // 로그인창 표시/숨김
+    loginBtn.addEventListener('click', () => {
+      if (sessionStorage.getItem('loggedIn')) {
+        logout();
+      } else {
+        loginBox.style.display = loginBox.style.display === 'none' ? 'block' : 'none';
+      }
+    });
+
+    // 로그인 함수
+    function login() {
+      const id = document.getElementById('userid').value;
+      const pw = document.getElementById('password').value;
+      if (id === 'plasma' && pw === '123') {
+        sessionStorage.setItem('loggedIn', 'true');
+        loginBox.style.display = 'none';
+        loginBtn.textContent = 'Logout';
+        restrictedMenus.forEach(m => m.style.display = 'inline');
+        alert('Login successful!');
+      } else {
+        alert('Invalid ID or password.');
+      }
+    }
+
+    // 로그아웃 함수
+    function logout() {
+      sessionStorage.removeItem('loggedIn');
+      loginBtn.textContent = 'Login';
+      restrictedMenus.forEach(m => m.style.display = 'none');
+      alert('Logged out.');
+    }
+
+    // 페이지 로드시 로그인 상태 복원
+    window.onload = () => {
+      if (sessionStorage.getItem('loggedIn')) {
+        loginBtn.textContent = 'Logout';
+        restrictedMenus.forEach(m => m.style.display = 'inline');
+      }
+    };
+  </script>
 </body>
 </html>
